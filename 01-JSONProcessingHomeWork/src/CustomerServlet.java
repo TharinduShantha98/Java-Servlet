@@ -1,5 +1,8 @@
 import db.DbConnection;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,15 +30,30 @@ public class CustomerServlet extends HttpServlet {
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if(resultSet.next()){
+            JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+            while (resultSet.next()){
                 String id  = resultSet.getString(1);
                 String name  =  resultSet.getString(2);
                 String address =  resultSet.getString(3);
-                String salary  =  resultSet.getString(4);
+                double salary  =  resultSet.getDouble(4);
+
+
+                JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+                objectBuilder.add("id", id);
+                objectBuilder.add("name",name);
+                objectBuilder.add("address",address );
+                objectBuilder.add("salary", salary);
+
+                arrayBuilder.add(objectBuilder.build());
+
 
 
 
             }
+
+
+            PrintWriter writer = resp.getWriter();
+            writer.print(arrayBuilder.build());
 
 
         } catch (SQLException throwables) {

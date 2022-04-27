@@ -101,7 +101,7 @@
 
 
 
-    <div class="row  mt-3">
+   <!-- <div class="row  mt-3">
         <h1 class="fw-bold text-center, text-info">Item</h1>
         <div class="col-lg-2 col-md-2 col-md-2 col-sm-12">
             <button  id="btn4" type="button" class="bg-info btn btn-success col-sm-12  col-">send request to json </button>
@@ -128,7 +128,7 @@
 
     </div>
 
-
+-->
 
 
 
@@ -248,7 +248,7 @@
 
 
 
-    $("#btn4").click(function () {
+   /* $("#btn4").click(function () {
         $("#customerTbl3").empty();
 
 
@@ -274,7 +274,7 @@
 
 
 
-    })
+    })*/
 
 
 
@@ -288,7 +288,7 @@
                 console.log(resp);
 
                 for(const customer of resp){
-                    let row = `<tr><th>${customer.id}</th><th>${customer.name}</th><th>${customer.address}</th><th>${100000}</th></tr>`
+                    let row = `<tr><th>${customer.id}</th><th>${customer.name}</th><th>${customer.address}</th><th>${customer.salary}</th></tr>`
                     $("#customerTbl2").append(row);
                 }
 
