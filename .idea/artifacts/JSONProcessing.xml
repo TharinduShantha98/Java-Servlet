@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="JSONProcessing">
+    <output-path>$PROJECT_DIR$/out/artifacts/JSONProcessing</output-path>
+    <root id="archive" name="JSONProcessing.war">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="01-JSONProcessingHomeWork" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="01-JSONProcessingHomeWork/web/Web" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="boots/css/bootstrap.css">
+
+
+</head>
+<body>
+<h1 class="bg-primary m-0">Hello ajax.....................!</h1>
+<h2 class="bg-primary m-0"> lets's implement ajax with a XMLHTTPRequest</h2>
+
+
+
+<div class="container-fluid">
+    <div class="row">
+
+        <form id="customerForm">
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Customer Id</label>
+                    <input type="text" name="customerId"  class="form-control" id="exampleFormControlInput1" placeholder="id">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Customer Name</label>
+                    <input  type="text"  name="customerName" class="form-control" id="exampleFormControlInput3" placeholder="name">
+                </div>
+
+
+
+            </div>
+            <div class="col-lg-6">
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Customer address</label>
+                    <input type="text" name="customerAddress"  class="form-control" id="exampleFormControlInput2" placeholder="address">
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Customer Salary</label>
+                    <input type="text" name="customerSalary" class="form-control" id="exampleFormControlInput4" placeholder="salary">
+                </div>
+
+
+                <button type="button" id="addCustomerBtn" class="btn btn-primary">save Customer</button>
+                <button type="button" id="deleteCustomerBtn" class="btn btn-warning">delete Customer</button>
+                <button type="button" id="updateCustomerBtn" class="btn btn-warning">update Customer</button>
+
+
+            </div>
+
+
+
+
+        </form>
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+    <div class="row  mt-3">
+        <h1 class="fw-bold text-center, text-danger">Customer</h1>
+        <div class="col-lg-2 col-md-2 col-md-2 col-sm-12">
+            <button  id="btn3" type="button" class="bg-danger btn btn-success col-sm-12  col-">send request to json </button>
+
+        </div>
+
+        <div class="col-lg-10 col-md-10 col-md-10 col-sm-12">
+
+            <table class="table col-sm-12">
+                <thead class="bg-danger">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">salary</th>
+                </tr>
+                </thead>
+                <tbody id="customerTbl2">
+
+                </tbody>
+            </table>
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <div class="row  mt-3">
+        <h1 class="fw-bold text-center, text-info">Item</h1>
+        <div class="col-lg-2 col-md-2 col-md-2 col-sm-12">
+            <button  id="btn4" type="button" class="bg-info btn btn-success col-sm-12  col-">send request to json </button>
+
+        </div>
+
+        <div class="col-lg-10 col-md-10 col-md-10 col-sm-12">
+            <table class="table col-sm-12">
+                <thead class="bg-info">
+                <tr>
+                    <th scope="col">code</th>
+                    <th scope="col">description</th>
+                    <th scope="col">qtyOnHand</th>
+                    <th scope="col">unitPrice</th>
+                </tr>
+                </thead>
+                <tbody id="customerTbl3">
+
+                </tbody>
+            </table>
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<script src="assest/jquery-3.6.0.min.js"></script>
+<script>
+
+    getCustomerData();
+
+    $("#addCustomerBtn").click(function () {
+            let data = $("#customerForm").serialize();
+
+            $.ajax({
+                url: "customer",
+                method: "POST",
+                data: data, // if we send with the request
+
+
+                success: function (resp) {
+                    console.log(resp)
+                    getCustomerData();
+
+                },
+
+                error: function (resp) {
+
+                }
+
+
+
+
+
+
+            })
+    })
+
+    $("#updateCustomerBtn").click(function () {
+        let formData =  $("#customerForm").serialize();
+
+
+        $.ajax({
+            url: "customer?"+ formData,
+            method: "PUT",
+
+            success: function (resp) {
+
+                getCustomerData();
+            }
+
+
+
+
+
+        })
+
+
+
+
+
+    })
+
+
+
+
+
+
+
+
+    $("#deleteCustomerBtn").click(function () {
+
+        let customerId = $("#exampleFormControlInput1").val();
+        console.log(customerId);
+
+        $.ajax({
+            url: "customer?CusId=" + customerId,
+            method: "DELETE",
+
+            success: function () {
+                getCustomerData();
+
+            }
+
+
+
+
+        })
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+    $("#btn3").click(function () {
+        getCustomerData();
+    })
+
+
+
+
+
+    $("#btn4").click(function () {
+        $("#customerTbl3").empty();
+
+
+
+        $.ajax({
+                url: "item",
+                method: "GET",
+                //dataType: "json",
+
+                success:function (resp) {
+                    console.log(resp);
+
+                    for (const item of resp){
+                        let row = `<tr><th>${item.code}</th><th>${item.description}</th><th>${item.qtyOnHand}</th><th>${item.unitPrice}</th></tr>`
+                        $("#customerTbl3").append(row);
+                    }
+
+                }
+
+            }
+
+        )
+
+
+
+    })
+
+
+
+    function getCustomerData(){
+        $("#customerTbl2").empty();
+        $.ajax({
+            url: "customer",
+            method: "GET",
+            dataType: "json",
+            success:function (resp) {
+                console.log(resp);
+
+                for(const customer of resp){
+                    let row = `<tr><th>${customer.id}</th><th>${customer.name}</th><th>${customer.address}</th><th>${100000}</th></tr>`
+                    $("#customerTbl2").append(row);
+                }
+
+                bindClickEvents();
+
+            }
+
+        })
+
+
+    }
+
+
+
+    function bindClickEvents(){
+        $("#customerTbl2>tr").click(function (){
+            //Get values from the selected row
+            let id=$(this).children().eq(0).text();
+            let name=$(this).children().eq(1).text();
+            let address=$(this).children().eq(2).text();
+            let salary=$(this).children().eq(3).text();
+
+            //Set values to the text-fields
+            $("#exampleFormControlInput1").val(id);
+            $("#exampleFormControlInput3").val(name);
+            $("#exampleFormControlInput2").val(address);
+            $("#exampleFormControlInput4").val(salary);
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+<script src="boots/js/bootstrap.bundle.js"></script>
+</body>
+</html>
