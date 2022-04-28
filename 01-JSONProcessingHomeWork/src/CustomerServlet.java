@@ -51,7 +51,12 @@ public class CustomerServlet extends HttpServlet {
 
 
             PrintWriter writer = resp.getWriter();
-            writer.print(arrayBuilder.build());
+
+            JsonObjectBuilder objectBuilder2  = Json.createObjectBuilder();
+            objectBuilder2.add("data",arrayBuilder.build() );
+            objectBuilder2.add("message", "done");
+            objectBuilder2.add("status", "200");
+            writer.print(objectBuilder2.build());
 
 
         } catch (SQLException throwables) {
@@ -172,16 +177,23 @@ public class CustomerServlet extends HttpServlet {
 
         try {
             Connection connection = DbConnection.getInstance().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE customer SET name = ?, address = ? WHERE  id  =  ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE customer SET name = ?, address = ?, salary = ? WHERE  id  =  ?");
 
             preparedStatement.setObject(1,customerName);
             preparedStatement.setObject(2,customerAddress);
-            preparedStatement.setObject(3,customerId);
+            preparedStatement.setObject(3,salary);
+            preparedStatement.setObject(4,customerId);
 
+
+            JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
 
             PrintWriter writer = resp.getWriter();
             if(preparedStatement.executeUpdate()>0){
-                writer.write("Customer delete successFully");
+                objectBuilder.add("data", "");
+                objectBuilder.add("message", "Successfully update");
+                objectBuilder.add("status", "200");
+                writer.print(objectBuilder.build());
+
 
             }else {
                 writer.write("Customer delete not successFully");

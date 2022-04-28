@@ -292,8 +292,12 @@
             dataType: "json",
             success:function (resp) {
                 console.log(resp);
+                console.log(resp.data);
 
-                for(const customer of resp){
+                for(const customer of resp.data){
+                    console.log(customer)
+
+
                     let row = `<tr><th>${customer.id}</th><th>${customer.name}</th><th>${customer.address}</th><th>${customer.salary}</th></tr>`
                     $("#customerTbl2").append(row);
                 }
