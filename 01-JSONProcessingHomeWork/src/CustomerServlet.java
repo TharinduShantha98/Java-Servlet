@@ -110,10 +110,45 @@ public class CustomerServlet extends HttpServlet {
     }
 
 
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        String customerId = req.getParameter("CusId");
+        System.out.println(customerId);
+
+        try {
+            Connection connection = DbConnection.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM customer WHERE  id = ?");
+            preparedStatement.setObject(1, customerId);
+
+            PrintWriter writer = resp.getWriter();
+
+
+            JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
+
+            if(preparedStatement.executeUpdate()>0){
+                objectBuilder.add("data", "");
+                objectBuilder.add("message", "Successfully delete");
+                objectBuilder.add("status", "200");
+                writer.print(objectBuilder.build());
 
 
 
+            }else {
+                writer.write("Customer delete not successFully");
+            }
 
 
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doPut(req, resp);
+    }
 }
