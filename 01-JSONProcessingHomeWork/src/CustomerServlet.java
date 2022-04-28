@@ -1,8 +1,6 @@
 import db.DbConnection;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -149,6 +147,62 @@ public class CustomerServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPut(req, resp);
+
+
+        JsonReader reader = Json.createReader(req.getReader());
+        JsonObject jsonObject = reader.readObject();
+
+        String customerId =  jsonObject.getString("customerId");
+        String customerName =  jsonObject.getString("customerName");
+        String customerAddress =  jsonObject.getString("customerAddress");
+        String salary  =  jsonObject.getString("salary");
+
+
+
+     /*   String customerId = req.getParameter("customerId");
+        String customerName = req.getParameter("customerName");
+        String customerAddress = req.getParameter("customerAddress");*/
+
+
+        System.out.println(customerName);
+        System.out.println(customerId);
+        System.out.println(customerAddress);
+        System.out.println(salary);
+
+
+        try {
+            Connection connection = DbConnection.getInstance().getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE customer SET name = ?, address = ? WHERE  id  =  ?");
+
+            preparedStatement.setObject(1,customerName);
+            preparedStatement.setObject(2,customerAddress);
+            preparedStatement.setObject(3,customerId);
+
+
+            PrintWriter writer = resp.getWriter();
+            if(preparedStatement.executeUpdate()>0){
+                writer.write("Customer delete successFully");
+
+            }else {
+                writer.write("Customer delete not successFully");
+            }
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
     }
+
+
+
+
+
+
+
+
+
 }

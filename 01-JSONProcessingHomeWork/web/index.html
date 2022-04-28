@@ -178,15 +178,29 @@
     })
 
     $("#updateCustomerBtn").click(function () {
-        let formData =  $("#customerForm").serialize();
+        //let formData =  $("#customerForm").serialize();
+        let customerId  = $("#exampleFormControlInput1").val();
+        let customerName  =  $("#exampleFormControlInput3").val();
+        let customerAddress  =  $("#exampleFormControlInput2").val();
+        let salary  =  $("#exampleFormControlInput4").val();
+
+
+
+        let jsonData  =  JSON.stringify({"customerId":customerId,
+                "customerName": customerName,
+                "customerAddress":customerAddress,
+                "salary":salary
+        })
+
 
 
         $.ajax({
-            url: "customer?"+ formData,
+            url: "customer",
             method: "PUT",
+            data: jsonData,
+            contentType: "application/json",
 
             success: function (resp) {
-
                 getCustomerData();
             }
 
